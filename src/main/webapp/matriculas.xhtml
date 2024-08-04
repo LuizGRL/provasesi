@@ -8,7 +8,7 @@
 	template="WEB-INF/template/LayoutSesi.xhtml">
 
 	<ui:define name="title">
-        Gest„o de matriculas
+        Gest√£o de matriculas
     </ui:define>
 
 	<ui:define name="body">
@@ -17,17 +17,6 @@
 			<p:messages id="messages" autoUpdate="true" />
 			<p:toolbar>
 				<f:facet name="left">
-					<h:panelGrid columns="2">
-						<h:panelGroup>
-							<p:inputText id="termoBusca" value="#{matriculaBean.termoBusca}" />
-							<p:spacer width="5" />
-							<p:commandButton value="Buscar"
-								action="#{matriculaBean.buscarMatricula()}"
-								update="messages tabelaForm:tabelaMatriculas" />
-						</h:panelGroup>
-					</h:panelGrid>
-					<p:spacer width="50" />
-
 					<p:commandButton value="Novo" icon="pi pi-plus"
 						onclick="PF('matriculaDialogWidgetVar').show()" type="button"
 						styleClass="button-spacing">
@@ -51,10 +40,10 @@
                     #{matricula.curso.nome}
                 </p:column>
 				<p:column>
-					<f:facet name="header">Data de MatrÌcula</f:facet>
+					<f:facet name="header">Data de Matr√≠cula</f:facet>
                     #{matriculaBean.formatarData(matricula.dataInicio)}
                 </p:column>
-				<p:column headerText="AÁıes">
+				<p:column headerText="A√ß√µes">
 					<p:commandButton value="Editar" icon="pi pi-pencil" 
 						oncomplete="PF('editarMatriculaDialogWidgetVar').show();"
 						action="#{matriculaBean.prepareEdit(matricula)}"
@@ -72,7 +61,7 @@
 		</h:form>
 
 		<h:form id="cadastroForm">
-			<p:dialog header="Nova MatrÌcula"
+			<p:dialog header="Nova Matr√≠cula"
 				widgetVar="matriculaDialogWidgetVar" modal="true" showHeader="true"
 				width="400" height="300" closeOnEscape="true"
 				id="matriculaCadastroDialog" onHide="limparCampos();">
@@ -91,7 +80,7 @@
 							itemValue="#{pessoa.cpf}" itemLabel="#{pessoa.nomeCompleto}" />
 					</p:selectOneMenu>
 
-					<p:outputLabel for="dataInicio" value="Data de InÌcio:" />
+					<p:outputLabel for="dataInicio" value="Data de In√≠cio:" />
 					<p:calendar id="dataInicio"
 						value="#{matriculaBean.matricula.dataInicio}" pattern="dd/MM/yyyy"
 						navigator="true" showButtonPanel="true" yearRange="1960:2040" />
@@ -124,7 +113,7 @@
 							itemValue="#{pessoa.cpf}" itemLabel="#{pessoa.nomeCompleto}"  />
 					</p:selectOneMenu>
 
-					<p:outputLabel for="dataInicio" value="Data de InÌcio:" />
+					<p:outputLabel for="dataInicio" value="Data de In√≠cio:" />
 					<p:calendar id="dataInicio"
 						value="#{matriculaBean.matricula.dataInicio}" pattern="dd/MM/yyyy"
 						navigator="true" showButtonPanel="true" yearRange="1960:2040" />
