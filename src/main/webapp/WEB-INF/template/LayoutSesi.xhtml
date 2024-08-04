@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Gestão de cursos - SESI</title>
+	<h:outputStylesheet library="luizgrl" name="style.css" />
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.css" />
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.js"></script>
+</h:head>
+
+<h:body>
+
+	<header> <h:graphicImage library="luizgrl"
+		name="logo-sesi.png" /> <nav>
+	<ul>
+		<li><h:link value="Aluno" outcome="/alunos.xhtml" /></li>
+		<li><h:link value="Curso" outcome="/index.xhtml" /></li>
+		<li><h:link value="Matrícula" outcome="/matriculas.xhtml" /></li>
+	</ul>
+
+	</nav> </header>
+
+
+	<h2>
+		<ui:insert name="title" />
+	</h2>
+	<div id="body">
+		<ui:insert name="body" />
+	</div>
+
+	<footer>desenvolvido por LuizGRL | Participante do processo
+	seletivo SESI </footer>
+	<script>
+		function applyCpfMask(element) {
+			Inputmask({ mask: '999.999.999-99' }).mask(element);
+		}
+	</script>
+
+</h:body>
+
+</html>

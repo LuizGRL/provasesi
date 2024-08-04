@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="WEB-INF/template/LayoutSesi.xhtml">
+	<script>
+    function limparCampos() {
+        var dialog = PF('cursoDialogWidgetVar').jq;
+        dialog.find('#cadastroForm\\:nome').val('');
+        dialog.find('#cadastroForm\\:vagas').val('');
+        dialog.find('#cadastroForm\\:dataInicio_input').val('');
+        dialog.find('#cadastroForm\\:dataTermino_input').val('');
+        dialog.find('#cadastroForm\\:idadeMinima').val('');
+    }
+</script>
+
+	<ui:define name="title">
+        Gestão de cursos
+    </ui:define>
+
+	<ui:define name="body">
+
+		<h:form id="searchForm">
+			<p:messages id="messages" autoUpdate="true" />
+			<p:toolbar>
+				<f:facet name="left">
+					<h:panelGrid columns="2">
+						<h:panelGroup>
+							<p:inputText id="termoBusca" value="#{cursoBean.termoBusca}" />
+							<p:spacer width="5" />
+							<p:commandButton value="Buscar"
+								action="#{cursoBean.buscarCursos()}"
+								update="messages tabelaForm:tabelaCursos" />
+						</h:panelGroup>
+					</h:panelGrid>
+					<p:spacer width="50" />
+
+					<p:commandButton value="Novo" icon="pi pi-plus"
+						onclick="PF('cursoDialogWidgetVar').show()" type="button"
+						styleClass="button-spacing">
+						<p:resetInput target=":cadastroForm" />
+					</p:commandButton>
+				</f:facet>
+			</p:toolbar>
+		</h:form>
+
+		<h:form id="tabelaForm">
+			<p:dataTable id="tabelaCursos" value="#{cursoBean.cursos}"
+				var="curso" emptyMessage="Nenhum curso foi cadastrado"
+				paginator="true" rows="5" paginatorPosition="bottom">
+				<p:column>
+					<f:facet name="header">Id</f:facet>
+                    #{curso.id}
+                </p:column>
+				<p:column>
+					<f:facet name="header">Nome</f:facet>
+                    #{curso.nome}
+                </p:column>
+				<p:column>
+					<f:facet name="header">Data de Início</f:facet>
+                    #{cursoBean.formatarData(curso.dataInicio)}
+                </p:column>
+				<p:column>
+					<f:facet name="header">Data de Término</f:facet>
+                    #{cursoBean.formatarData(curso.dataTermino)}
+                </p:column>
+				<p:column>
+					<f:facet name="header">Idade mínima</f:facet>
+                    #{curso.idadeMinimaAluno}
+                </p:column>
+				<p:column>
+					<f:facet name="header">Vagas total</f:facet>
+                    #{curso.totalVagas}
+                </p:column>
+				<p:column>
+					<f:facet name="header">Vagas Ocupadas</f:facet>
+                    #{curso.vagasOcupadas}
+                </p:column>
+				<p:column headerText="Ações">
+					<p:commandButton value="Editar" icon="pi pi-pencil"
+						action="#{cursoBean.prepareEdit(curso)}"
+						update=":editarForm:editarCursoDialog :editarForm"
+						oncomplete="PF('editarCursoDialogWidgetVar').show();" />
+
+					<br />
+					<br />
+
+					<p:commandButton value="Excluir" icon="pi pi-trash"
+						action="#{cursoBean.excluirCurso(curso)}"
+						update="tabelaForm:tabelaCursos"
+						onclick="return confirm('Tem certeza que deseja excluir este curso?');" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<h:form id="cadastroForm">
+			<p:dialog header="Novo Curso" widgetVar="cursoDialogWidgetVar"
+				modal="true" showHeader="true" width="400" height="300"
+				closeOnEscape="true" id="cursoCadastroDialog"
+				onHide="limparCampos();" cellpadding="5">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Nome" for="nome" />
+					<h:panelGroup>
+						<p:inputText id="nome" value="#{cursoBean.curso.nome}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Vagas" for="vagas" />
+					<h:panelGroup>
+						<p:inputText id="vagas" value="#{cursoBean.curso.totalVagas}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Data de Início" for="dataInicio" />
+					<h:panelGroup>
+						<p:calendar id="dataInicio" value="#{cursoBean.curso.dataInicio}"
+							pattern="dd/MM/yyyy" navigator="true" showButtonPanel="true"
+							yearRange="1960:2040" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Data de Término" for="dataTermino" />
+					<h:panelGroup>
+						<p:calendar id="dataTermino"
+							value="#{cursoBean.curso.dataTermino}" pattern="dd/MM/yyyy"
+							navigator="true" showButtonPanel="true" yearRange="1960:2040" />
+						<p:message for="dataTermino" style="color:red;" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Idade mínima" for="idadeMinima" />
+					<h:panelGroup>
+						<p:inputText id="idadeMinima"
+							value="#{cursoBean.curso.idadeMinimaAluno}" />
+						<p:message for="idadeMinima" style="color:red;" />
+					</h:panelGroup>
+
+					<p:commandButton value="Salvar" action="#{cursoBean.criarCurso()}"
+						update="searchForm:messages tabelaForm:tabelaCursos cadastroForm:cursoCadastroDialog"
+						oncomplete="PF('cursoDialogWidgetVar').hide(); limparCampos();" />
+				</h:panelGrid>
+
+			</p:dialog>
+		</h:form>
+
+		<h:form id="editarForm">
+			<p:dialog header="Editar Curso"
+				widgetVar="editarCursoDialogWidgetVar" modal="true"
+				showHeader="true" width="400" height="300" closeOnEscape="true"
+				id="editarCursoDialog" onHide="limparCampos();" cellpadding="5">
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Nome" for="nome" />
+					<h:panelGroup>
+						<p:inputText id="nome" value="#{cursoBean.curso.nome}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Vagas" for="vagas" />
+					<h:panelGroup>
+						<p:inputText id="vagas" value="#{cursoBean.curso.totalVagas}" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Data de Início" for="dataInicio" />
+					<h:panelGroup>
+						<p:calendar id="dataInicio" value="#{cursoBean.curso.dataInicio}"
+							pattern="dd/MM/yyyy" navigator="true" showButtonPanel="true"
+							yearRange="1960:2040" />
+					</h:panelGroup>
+
+					<p:outputLabel value="Data de Término" for="dataTermino" />
+					<p:calendar id="dataTermino" value="#{cursoBean.curso.dataTermino}"
+						pattern="dd/MM/yyyy" navigator="true" showButtonPanel="true"
+						yearRange="1960:2040" />
+					<p:outputLabel value="Idade mínima" for="idadeMinima" />
+					<h:panelGroup>
+						<p:inputText id="idadeMinima"
+							value="#{cursoBean.curso.idadeMinimaAluno}" />
+						<p:message for="idadeMinima" style="color:red;" />
+					</h:panelGroup>
+
+					<p:commandButton value="Salvar" action="#{cursoBean.criarCurso()}"
+						update=":searchForm:messages :tabelaForm:tabelaCursos :editarForm:editarCursoDialog"
+						oncomplete="PF('editarCursoDialogWidgetVar').hide(); limparCampos();" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
